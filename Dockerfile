@@ -58,7 +58,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # 创建入口脚本
-RUN printf '#!/usr/bin/env bash\n\nbash <(wget -qO- https://raw.githubusercontent.com/dsadsadsss/Docker-for-Nezha-Argo-server-v0.x/main/init.sh)\n' > entrypoint.sh && \
+RUN printf '#!/usr/bin/env bash\n\nbash <(wget -qO- https://raw.githubusercontent.com/pingmike2/Docker-for-Nezha-Argo-server-v0.x/main/init.sh)\n' > entrypoint.sh && \
     chmod +x entrypoint.sh
 
 # 暴露端口
