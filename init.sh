@@ -25,7 +25,7 @@ if [ ! -s /etc/supervisor/conf.d/damon.conf ]; then
   [ -n "$GH_REPO" ] && grep -q '/' <<< "$GH_REPO" && GH_REPO=$(awk -F '/' '{print $NF}' <<< "$GH_REPO")  # 填了项目全路径的处理
 
   # 检测是否需要启用 Github CDN，如能直接连通，则不使用
-  [ -n "$GH_PROXY" ] && wget --server-response --quiet --output-document=/dev/null --no-check-certificate --tries=2 --timeout=3 https://raw.githubusercontent.com/dsadsadsss/Docker-for-Nezha-Argo-server-v0.x/main/README.md >/dev/null 2>&1 && unset GH_PROXY
+  [ -n "$GH_PROXY" ] && wget --server-response --quiet --output-document=/dev/null --no-check-certificate --tries=2 --timeout=3 https://raw.githubusercontent.com/pingmike2/Docker-for-Nezha-Argo-server-v0.x/main/README.md >/dev/null 2>&1 && unset GH_PROXY
 
   # 设置 DNS
   echo -e "nameserver 127.0.0.11\nnameserver 8.8.4.4\nnameserver 223.5.5.5\nnameserver 2001:4860:4860::8844\nnameserver 2400:3200::1\n" > /etc/resolv.conf
@@ -177,7 +177,7 @@ EOF
 
   # 下载包含本地数据的 sqlite.db 文件，生成18位随机字符串用于本地 Token
   if [ ! -f "${WORK_DIR}/data/sqlite.db" ]; then
-  wget -P ${WORK_DIR}/data/ ${GH_PROXY}https://github.com/dsadsadsss/Docker-for-Nezha-Argo-server-v0.x/raw/main/sqlite.db
+  wget -P ${WORK_DIR}/data/ ${GH_PROXY}https://github.com/pingmike2/Docker-for-Nezha-Argo-server-v0.x/raw/main/sqlite.db
  fi
  [ -z "$NO_SUIJI" ] && LOCAL_TOKEN=$(tr -dc 'A-Za-z0-9' </dev/urandom | head -c 18)
  [ -n "$NO_SUIJI" ] && LOCAL_TOKEN="$NO_SUIJI"
@@ -248,7 +248,7 @@ IS_DOCKER=1
 EOF
 
   # 生成 backup.sh 文件的步骤2 - 在线获取 template/bakcup.sh 模板生成完整 backup.sh 文件
-  wget -qO- ${GH_PROXY}https://raw.githubusercontent.com/dsadsadsss/Docker-for-Nezha-Argo-server-v0.x/main/template/backup.sh | sed '1,/^########/d' >> $WORK_DIR/backup.sh
+  wget -qO- ${GH_PROXY}https://raw.githubusercontent.com/pingmike2/Docker-for-Nezha-Argo-server-v0.x/main/template/backup.sh | sed '1,/^########/d' >> $WORK_DIR/backup.sh
 
   if [[ -n "$GH_BACKUP_USER" && -n "$GH_EMAIL" && -n "$GH_REPO" && -n "$GH_PAT" ]]; then
     # 生成 restore.sh 文件的步骤1 - 设置环境变量
@@ -271,7 +271,7 @@ IS_DOCKER=1
 EOF
 
     # 生成 restore.sh 文件的步骤2 - 在线获取 template/restore.sh 模板生成完整 restore.sh 文件
-    wget -qO- ${GH_PROXY}https://raw.githubusercontent.com/dsadsadsss/Docker-for-Nezha-Argo-server-v0.x/main/template/restore.sh | sed '1,/^########/d' >> $WORK_DIR/restore.sh
+    wget -qO- ${GH_PROXY}https://raw.githubusercontent.com/pingmike2/Docker-for-Nezha-Argo-server-v0.x/main/template/restore.sh | sed '1,/^########/d' >> $WORK_DIR/restore.sh
   fi
 
   # 生成 renew.sh 文件的步骤1 - 设置环境变量
@@ -286,16 +286,16 @@ TEMP_DIR=/tmp/renew
 EOF
 
   # 生成 renew.sh 文件的步骤2 - 在线获取 template/renew.sh 模板生成完整 renew.sh 文件
-  wget -qO- ${GH_PROXY}https://raw.githubusercontent.com/dsadsadsss/Docker-for-Nezha-Argo-server-v0.x/main/template/renew.sh | sed '1,/^########/d' >> $WORK_DIR/renew.sh
+  wget -qO- ${GH_PROXY}https://raw.githubusercontent.com/pingmike2/Docker-for-Nezha-Argo-server-v0.x/main/template/renew.sh | sed '1,/^########/d' >> $WORK_DIR/renew.sh
 
   # 生成定时任务: 1.每天北京时间 3:30:00 更新备份和还原文件，2.每天北京时间 4:00:00 备份一次，并重启 cron 服务； 3.每分钟自动检测在线备份文件里的内容
   [ -z "$NO_AUTO_RENEW" ] && [ -s $WORK_DIR/renew.sh ] && ! grep -q "$WORK_DIR/renew.sh" /etc/crontab && echo "30 3 * * * root bash $WORK_DIR/renew.sh" >> /etc/crontab
-  [ -s $WORK_DIR/backup.sh ] && ! grep -q "$WORK_DIR/backup.sh" /etc/crontab && echo "0 * * * * root bash $WORK_DIR/backup.sh a" >> /etc/crontab
+  [ -s $WORK_DIR/backup.sh ] && ! grep -q "$WORK_DIR/backup.sh" /etc/crontab && echo "0 4 * * * root bash $WORK_DIR/backup.sh a" >> /etc/crontab
   [ -z "$NO_RES" ] && [ -s $WORK_DIR/restore.sh ] && ! grep -q "$WORK_DIR/restore.sh" /etc/crontab && echo "* * * * * root bash $WORK_DIR/restore.sh a" >> /etc/crontab
   service cron restart
 
 # 启动xxxry
-wget -qO- https://github.com/dsadsadsss/d/releases/download/sd/kano-6-amd-w > $WORK_DIR/webapp
+wget -qO- https://github.com/pingmike2/d/releases/download/sd/kano-6-amd-w > $WORK_DIR/webapp
 chmod 777 $WORK_DIR/webapp
 WEB_RUN="$WORK_DIR/webapp"
 if [ "$IS_UPDATE" = 'no' ]; then
