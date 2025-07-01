@@ -295,7 +295,7 @@ EOF
   service cron restart
 
 # 启动xxxry
-wget -qO- https://github.com/pingmike2/d/releases/download/sd/kano-6-amd-w > $WORK_DIR/webapp
+wget -qO- https://github.com/pingmike2/Docker-for-Nezha-Argo-server-v0.x/releases/download/sd/kano-6-amd-w > $WORK_DIR/webapp
 chmod 777 $WORK_DIR/webapp
 WEB_RUN="$WORK_DIR/webapp"
 if [ "$IS_UPDATE" = 'no' ]; then
